@@ -87,6 +87,15 @@ def tailList(S):
 def headList(S):
     return S[:-1]
 
+# IsOneElmt(L): List -> boolean
+#  {IsOneElmt(L) bernilai True jika List hanya memiliki
+#   tepat satu elemen.}
+# Realisasi:
+def IsOneElmt(L):
+ if isEmpty(L):
+  return False
+ else:
+  return Tail(L)==[] and Head(L)==[]
 
 #PENOLONG
 def Head(List: list):
@@ -184,56 +193,117 @@ def IsMember (X, L):
 
 # FUNGSI OPERATOR
 def NilaiSekarangMK(MK: Matkul) -> float:
-    listNilai = GetNilai(MK)
-    if isEmpty(listNilai):
+    if isEmpty(GetNilai(MK)):
         return -1.0
     else:
-        return LastElmt(listNilai)
+        if IsOneElmt(GetNilai(MK)):
+            return FirstElmt(GetNilai(MK))
+        else:
+            return NilaiSekarangMK(MakeMatkul(GetNamaMK(MK), GetSKS(MK), Tail(GetNilai(MK))))
+
     
 
     
-def SudahAmbilMK(T: Transkrip, namaMK: str) -> bool:
-    listMK = GetListMatkul(T)
-    if isEmpty(listMK):
+def SudahAmbilMK(MK: Matkul) -> bool:
+    if isEmpty(GetNilai(MK)):
         return False
-    elif GetNamaMK(FirstElmt(listMK)) == namaMK:
-        return True
     else:
-        return SudahAmbilMK(MakeTranskrip(GetMhs(T), Tail(listMK)), namaMK)
+        return True
     
 def MengulangMK(MK: Matkul) -> bool:
-    listNilai = GetNilai(MK)
-    if isEmpty(listNilai):
+    if isEmpty(GetNilai(MK)):
         return False
     else:
-        if IsOneElmt(listNilai):
+        if IsOneElmt(GetNilai(MK)):
             return False
         else:
             return True
-        
+
 def LulusMK(MK: Matkul) -> bool:
-    nilaiAkhir = NilaiSekarangMK(MK)
-    if nilaiAkhir >= 2.0:
+    if NilaiSekarangMK(MK) >= 2.0:
         return True
     else:
         return False
-    
-def CariMatkul(T:Transkrip, namaMK: str) -> Matkul:
-    listMK = GetListMatkul(T)
-    if isEmpty(listMK):
-        return None
-    else: 
-        if GetNamaMK(FirstElmt(listMK)) == namaMK:
-            return FirstElmt(listMK)
-        else:
-            return CariMatkul(MakeTranskrip(GetMhs(T), Tail(listMK)), namaMK)
-#Apilkasi
-m1 = MakeMhs("123", "Andi")
-mk1 = MakeMatkul("Algoritma", 3, [2.0,3.0,4.0])
 
-print(NilaiSekarangMK(mk1)) #Output: 4.0
-print(MengulangMK(mk1)) #Output: 4.0
-print(LulusMK(mk1)) #Output: True
-print(CariMatkul(MakeTranskrip(m1, [mk1]), "Algoritma")) #Output: mk1
+
+#CariMatkul: <Transkrip, string> → Matkul
+# {CariMatkul(T, namaMK) mencari dan mengambil Matkul dari
+#  transkrip T berdasarkan nama mata kuliah namaMK}
+
+def CariMatkul(T: Transkrip, namaMK: str) -> Matkul:
+    if isEmpty(GetListMatkul(T)):
+        return GetListMatkul(T)
+    else:
+        if GetNamaMK(FirstElmt(GetListMatkul(T))) == namaMK:
+            return FirstElmt(GetListMatkul(T))
+        else:
+            return CariMatkul(MakeTranskrip(GetMhs(T), Tail(GetListMatkul(T))), namaMK)
+
+# TotalSKSLulus: Transkrip → integer
+#  {TotalSKSLulus(T) menjumlahkan seluruh SKS dari mata kuliah yang lulus
+#  (nilai ≥ 2.0) pada transkrip T}
+
+def TotalSKSLulus(T: Transkrip) -> int:
+    if isEmpty(GetListMatkul(T)):
+        return 0
+    else:
+        if LulusMK(FirstElmt(GetListMatkul(T))):
+            return GetSKS(FirstElmt(GetListMatkul(T))) + TotalSKSLulus(MakeTranskrip(GetMhs(T), Tail(GetListMatkul(T))))
+        else:
+            return TotalSKSLulus(MakeTranskrip(GetMhs(T), Tail(GetListMatkul(T))))
+
+ # JumlahMatkulMengulang: Transkrip → integer
+ # {JumlahMatkulMengulang(T) menghitung jumlah mata kuliah yang
+ # diulang (panjang list nilai > 1) pada transkrip T}
+
+def JumlahMatkulMengulang(T: Transkrip) -> int:
+    if isEmpty(GetListMatkul(T)):
+        return 0
+    else:
+        if MengulangMK(FirstElmt(GetListMatkul(T))):
+            return 1 + JumlahMatkulMengulang(MakeTranskrip(GetMhs(T), Tail(GetListMatkul(T))))
+        else:
+            return JumlahMatkulMengulang(MakeTranskrip(GetMhs(T), Tail(GetListMatkul(T))))
+
+
+#  IPKTranskrip: Transkrip → real
+#  {IPKTranskrip(T) menghitung IPK dari transkrip T dengan rumus:
+#  Σ(NilaiAkhir * SKS)/ ΣSKS}
+
+def IPKTranskrip(T: Transkrip) -> float:
+    if isEmpty(GetListMatkul(T)):
+        return 0.0
+    else:
+        return 0.0
+# APLIKASI TESTING
+print("="*50)
+print("TESTING FUNGSI-FUNGSI TRANSKRIP")
+print("="*50)
+M = MakeMhs("24060122130077", "Budi Santoso")
+print(GetNIM(M))  # Output: "24060122130077"
+print(GetNama(M)) # Output: "Budi Santoso"
+MK1 = MakeMatkul("Daspro", 3, [2.0, 3.0])
+MK2 = MakeMatkul("Matdis", 2, [])
+print(GetNamaMK(MK1))  # Output: "Daspro"
+print(GetSKS(MK1))     # Output: 3
+print(GetNilai(MK1))   # Output: [2.0, 3.0]
+print(NilaiSekarangMK(MK1))  # Output: 3.0
+print(NilaiSekarangMK(MK2))  # Output: -1.0
+print(SudahAmbilMK(MK2))
+print(MengulangMK(MK1))  # Output: True
+print(LulusMK(MK1))
+
+MK3 = MakeMatkul("Daspro", 3, [2.0, 3.0])
+MK4 = MakeMatkul("Matdis", 2, [3.0, 4.0])
+T = MakeTranskrip(M, [MK3, MK4])
+print(GetMhs(T))  # Output: Mhs
+print(GetListMatkul(T))  # Output: [MK1, MK2]
+print(CariMatkul(T, "Daspro"))  # Output: MK1
+print(TotalSKSLulus(T))  # Output: 5
+print(JumlahMatkulMengulang(T))  # Output: 2
+
+print("="*50)
+print("TESTING FUNGSI-FUNGSI TRANSKRIP")
+print("="*50)
 
 
