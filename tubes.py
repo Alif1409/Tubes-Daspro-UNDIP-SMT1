@@ -520,4 +520,3 @@ print(CountMhsDenganIPKRentang([MakeTranskrip(MakeMhs("24060122130077", "Budi Sa
 # print(AddNilaiMatkul(S, "24060122130077", "Daspro", 4.0))
 # print(CariTranskripMhs(S, "24060122130077"))
 # print(TopIPK(S)) 
-
