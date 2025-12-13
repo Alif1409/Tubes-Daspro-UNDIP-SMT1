@@ -1,547 +1,298 @@
-# 2 Bagian 1 — Tipe Bentukan Dasar
-# 2.1 Tipe Mahasiswa (Mhs)
-# Definisi: Type Mhs berisi nim dan nama.
+# ============================================================
+# MAIN.PY - FILE TEST CASE UNTUK TUBES DASPRO
+# ============================================================
+# File ini berisi test case untuk menguji semua fungsi
+# yang ada di tubes-daspro.py dengan Normal Case dan Edge Case
+# ============================================================
 
-# Type Mhs: tuple of (string, string)
-# {Mhs adalah tipe data untuk merepresentasikan
-#  data mahasiswa yang terdiri dari NIM dan nama}
-type Mhs = tuple[str, str]
+# Import semua fungsi dari tubes-daspro
+from importlib import import_module
+tubes = import_module("tubes-daspro")
 
-#DEFINISI DAN SPESIFIKASI KONTRUKTOR
-# MakeMhs: <string, string> → Mhs
-# {MakeMhs(nim, nama) membuat objek Mhs dengan NIM nim dan nama
-# nama}
-def MakeMhs(nim: str, nama: str) -> Mhs:
-    return (nim, nama)
+# Import fungsi-fungsi yang diperlukan
+MakeMhs = tubes.MakeMhs
+MakeMatkul = tubes.MakeMatkul
+MakeTranskrip = tubes.MakeTranskrip
+MakeSetTranskrip = tubes.MakeSetTranskrip
+GetNIM = tubes.GetNIM
+GetNama = tubes.GetNama
+GetNamaMK = tubes.GetNamaMK
+GetSKS = tubes.GetSKS
+GetNilai = tubes.GetNilai
+GetMhs = tubes.GetMhs
+GetListMatkul = tubes.GetListMatkul
+NilaiSekarangMK = tubes.NilaiSekarangMK
+SudahAmbilMK = tubes.SudahAmbilMK
+MengulangMK = tubes.MengulangMK
+LulusMK = tubes.LulusMK
+CariMatkul = tubes.CariMatkul
+TotalSKSLulus = tubes.TotalSKSLulus
+JumlahMatkulMengulang = tubes.JumlahMatkulMengulang
+IPKTranskrip = tubes.IPKTranskrip
+AddTranskrip = tubes.AddTranskrip
+AddNilaiMatkul = tubes.AddNilaiMatkul
+CariTranskripMhs = tubes.CariTranskripMhs
+TopIPK = tubes.TopIPK
+CountMhsPernahMengulang = tubes.CountMhsPernahMengulang
+CountMhsLulusSemuaMatkul = tubes.CountMhsLulusSemuaMatkul
+MatkulPalingSeringDiulang = tubes.MatkulPalingSeringDiulang
+CountMhsDenganIPKRentang = tubes.CountMhsDenganIPKRentang
+TotalSKS = tubes.TotalSKS
 
-#DEFINISI DAN SPESIFIKASI SELEKTOR
-# {GetNIM(M) mengambil NIM dari mahasiswa M}
-def GetNIM(M: Mhs) -> str:
-    return M[0]
+# ============================================================
+# HELPER FUNCTION
+# ============================================================
+def header(title):
+    print("\n" + "=" * 60)
+    print(f" {title}")
+    print("=" * 60)
 
-# {GetNama(M) mengambil nama dari mahasiswa M}
-def GetNama(M: Mhs) -> str:
-    return M[1]
+def test(name, result, expected):
+    status = "PASS" if result == expected else "FAIL"
+    print(f"  [{status}] {name}")
+    print(f"         Hasil   : {result}")
+    print(f"         Expected: {expected}")
 
-# 2.2 Tipe Mata Kuliah (Matkul)
-# Definisi: Matkul memiliki namamk, sks, dan list nilai (0–4) yang terurut naik. Nilai
-# terakhir adalah nilai akhir.
+# ============================================================
+# TEST CASE 1: TIPE MAHASISWA (Mhs)
+# ============================================================
+header("TEST CASE 1: TIPE MAHASISWA (Mhs)")
 
-# Type Matkul: tuple of (string, integer, list of real)
-# {Matkul adalah tipe data untuk merepresentasikan
-#  data mata kuliah yang terdiri dari nama mata kuliah, jumlah SKS, dan list nilai}
-type Matkul = tuple[str, int, list]
+# Normal Case
+print("\n[Normal Case]")
+test("MakeMhs - konstruktor",
+     MakeMhs("24060122130001", "Ahmad"),
+     ("24060122130001", "Ahmad"))
 
-#DEFINISI DAN SPESIFIKASI KONTRUKTOR
+test("GetNIM - selektor NIM",
+     GetNIM(MakeMhs("24060122130001", "Ahmad")),
+     "24060122130001")
 
-# MakeMatkul: <string, integer, list of real> → Matkul
-# {MakeMatkul(nama, sks, listNilai) membuat objek Matkul dengan nama
-# mata kuliah nama, jumlah SKS sks, dan list nilai listNilai}
-def MakeMatkul(nama: str, sks: int, listnilai: list) -> Matkul:
-    return (nama, sks, listnilai)
+test("GetNama - selektor nama",
+     GetNama(MakeMhs("24060122130001", "Ahmad")),
+     "Ahmad")
 
-#DEFINISI DAN SPESIFIKASI SELEKTOR
+# Edge Case
+print("\n[Edge Case]")
+test("MakeMhs - NIM dan nama kosong",
+     MakeMhs("", ""),
+     ("", ""))
 
-# GetNamaMK: Matkul → string
-# {GetNamaMK(MK) mengambil nama mata kuliah dari MK}
-def GetNamaMK(MK: Matkul) -> str:
-    return MK[0]
+test("GetNIM - dari Mhs kosong",
+     GetNIM(MakeMhs("", "")),
+     "")
 
-# GetSKS: Matkul → integer
-# {GetSKS(MK) mengambil jumlah SKS dari MK}
-def GetSKS(MK: Matkul) -> int:
-    return MK[1]
+# ============================================================
+# TEST CASE 2: TIPE MATA KULIAH (Matkul)
+# ============================================================
+header("TEST CASE 2: TIPE MATA KULIAH (Matkul)")
 
-# GetNilai: Matkul → list of real
-# {GetNilai(MK) mengambil list nilai dari MK}
-def GetNilai(MK: Matkul) -> list:
-    return MK[2]
+# Normal Case
+print("\n[Normal Case]")
+test("MakeMatkul - konstruktor",
+     MakeMatkul("Daspro", 3, [2.0, 3.0]),
+     ("Daspro", 3, [2.0, 3.0]))
 
- # FirstElmt(L): List tidak kosong -> elemen
- #  {FirstElmt(L) mengembalikan elemen pertama dari L.}
- # Realisasi:
-def FirstElmt(L):
-    return L[0]
+test("GetNamaMK - selektor nama MK",
+     GetNamaMK(MakeMatkul("Daspro", 3, [2.0, 3.0])),
+     "Daspro")
 
- # LastElmt(L): List tidak kosong -> elemen
- #  {LastElmt(L) mengembalikan elemen terakhir dari L.}
- # Realisasi:
-def LastElmt(L):
-    return L[-1]
+test("GetSKS - selektor SKS",
+     GetSKS(MakeMatkul("Daspro", 3, [2.0, 3.0])),
+     3)
 
- # Head(L): List tidak kosong -> List
- #  {Head(L) mengembalikan list L tanpa elemen terakhir 
-#   dari L; dapat menghasilkan list kosong.}
- # Realisasi:
-def Head(L):
-    return L[:-1]
+test("GetNilai - selektor list nilai",
+     GetNilai(MakeMatkul("Daspro", 3, [2.0, 3.0])),
+     [2.0, 3.0])
 
- # Tail(L): List tidak kosong -> List
- #  {Tail(L) mengembalikan list L tanpa elemen pertama 
- #   dari L; dapat menghasilkan list kosong.}
-def Tail(L):
-    return L[1:]
+test("NilaiSekarangMK - nilai terakhir dari list",
+     NilaiSekarangMK(MakeMatkul("Daspro", 3, [2.0, 3.0])),
+     3.0)
 
- # DEFINISI DAN SPESIFIKASI PREDIKAT
- # isEmpty(L): List -> boolean
- #  {isEmpty(L) bernilai True jika List merupakan list kosong.}
-def isEmpty(L):
-    return L == []
+test("SudahAmbilMK - sudah ada nilai",
+     SudahAmbilMK(MakeMatkul("Daspro", 3, [3.0])),
+     True)
 
- # IsOneElmt(L): List -> boolean
- #  {IsOneElmt(L) bernilai True jika List hanya memiliki 
- #   tepat satu elemen.}
-def IsOneElmt(L):
-    if isEmpty(L):
-        return False
-    else:
-        return Tail(L) == [] and Head(L) == []
+test("MengulangMK - list nilai > 1",
+     MengulangMK(MakeMatkul("Daspro", 3, [2.0, 3.0])),
+     True)
 
-#IsMember: elemen, List -> boolean
-# {IsMember(e,L) mengembalikan true jika e adalah anggota dari L}
-def IsMember (X, L):
-    if isEmpty (L):
-        return False
-    elif FirstElmt (L) == X:
-        return True
-    else:
-        return IsMember (X, Tail (L))
+test("MengulangMK - list nilai = 1",
+     MengulangMK(MakeMatkul("Daspro", 3, [3.0])),
+     False)
 
+test("LulusMK - nilai >= 2.0",
+     LulusMK(MakeMatkul("Daspro", 3, [3.0])),
+     True)
 
+test("LulusMK - nilai < 2.0",
+     LulusMK(MakeMatkul("Daspro", 3, [1.5])),
+     False)
 
-# DEFINISI DAN SPESIFIKASI FUNGSI ANTARA
- # Konso: elemen, List -> List
- #  {Konso(e, L) menghasilkan sebuah list dari e dan L 
- #   dengan e sebagai elemen pertama dari L.}
-def Konso (E, L):
-    return [E] + L
+# Edge Case
+print("\n[Edge Case]")
+test("NilaiSekarangMK - list kosong",
+     NilaiSekarangMK(MakeMatkul("Daspro", 3, [])),
+     -1.0)
 
- # Konsi: elemen, List -> List
- # {Konsi(e, L) menghasilkan sebuah list dari e dan L
- # dengan e sebagai elemen terakhir dari L.}
-def Konsi (L,E):
-    return L + [E]
+test("SudahAmbilMK - list kosong",
+     SudahAmbilMK(MakeMatkul("Daspro", 3, [])),
+     False)
 
-# Fungsi konsLo (L, S)  membentuk list baru dengan list (L) sebagai elemen pertama list of list 
-# konsLo: list, list of list -> list of list
-def konsLo(L, S):
-    return [L] + S
+test("MengulangMK - list kosong",
+     MengulangMK(MakeMatkul("Daspro", 3, [])),
+     False)
 
-# Fungsi konsLi (S, L) membentuk list baru dengan list (L) sebagai elemen terakhir list of list
-# konsLi: list of list, list -> list of list
-def konsLi(S, L):
-    return S + [L]
+test("LulusMK - nilai pas batas 2.0",
+     LulusMK(MakeMatkul("Daspro", 3, [2.0])),
+     True)
 
+# ============================================================
+# TEST CASE 3: TIPE TRANSKRIP
+# ============================================================
+header("TEST CASE 3: TIPE TRANSKRIP")
 
-# DEFINISI DAN SPESIFIKASI OPERATOR
+# Normal Case
+print("\n[Normal Case]")
+test("MakeTranskrip - konstruktor",
+     GetNIM(GetMhs(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])]))),
+     "001")
 
-# NilaiSekarangMK: Matkul → real
-# {NilaiSekarangMK(MK) mengambil nilai akhir dari MK.}
-# {Jika list kosong → −1.0.}
-# {Jika tidak → elemen terakhir}
-def NilaiSekarangMK(MK: Matkul) -> float:
-    if isEmpty(GetNilai(MK)):
-        return -1.0
-    else:
-        if IsOneElmt(GetNilai(MK)):
-            return FirstElmt(GetNilai(MK))
-        else:
-            return NilaiSekarangMK(MakeMatkul(GetNamaMK(MK), GetSKS(MK), Tail(GetNilai(MK))))
+test("GetMhs - selektor mahasiswa",
+     GetMhs(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])),
+     ("001", "Ahmad"))
 
-# SudahAmbilMK: Matkul → boolean
-# {SudahAmbilMK(MK) mengembalikan True jika list nilai MK tidak kosong}
-def SudahAmbilMK(MK: Matkul) -> bool:
-    if isEmpty(GetNilai(MK)):
-        return False
-    else:
-        return True
+test("CariMatkul - matkul ditemukan",
+     GetNamaMK(CariMatkul(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0]), MakeMatkul("Strukdis", 3, [4.0])]), "Daspro")),
+     "Daspro")
 
-# MengulangMK: Matkul → boolean
-# {MengulangMK(MK) mengembalikan True jika panjang list nilai MK > 1}
-def MengulangMK(MK: Matkul) -> bool:
-    if isEmpty(GetNilai(MK)):
-        return False
-    else:
-        if IsOneElmt(GetNilai(MK)):
-            return False
-        else:
-            return True
+test("TotalSKSLulus - semua lulus",
+     TotalSKSLulus(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0]), MakeMatkul("Aljabar Linear", 3, [4.0])])),
+     6)
 
-# LulusMK: Matkul → boolean
-# {LulusMK(MK) mengembalikan True jika nilai akhir MK ≥ 2.0}
-def LulusMK(MK: Matkul) -> bool:
-    if NilaiSekarangMK(MK) >= 2.0:
-        return True
-    else:
-        return False
-    
-# 2.3 Tipe Transkrip
-# Definisi: Transkrip berisi data mahasiswa dan daftar mata kuliahnya.
-# Type Transkrip: tuple of (Mhs, list of Matkul)
-# {Transkrip adalah tipe data untuk merepresentasikan
-#  data transkrip yang terdiri dari data mahasiswa dan list mata kuliah}
-type Transkrip = tuple[Mhs, Matkul]
+test("JumlahMatkulMengulang - ada yang mengulang",
+     JumlahMatkulMengulang(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [2.0, 3.0]), MakeMatkul("MTK1", 3, [4.0])])),
+     1)
 
-# DEFINISI DAN SPESIFIKASI KONSTRUKTOR
-# MakeTranskrip: <Mhs, list of Matkul> → Transkrip
-# {MakeTranskrip(M, listMK) membuat objek Transkrip dengan data
-# mahasiswa M dan list mata kuliah listMK}
-def MakeTranskrip(M: Mhs, ListMK: Matkul) -> Transkrip:
-    return (M, ListMK)
+test("IPKTranskrip - hitung IPK",
+     IPKTranskrip(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0]), MakeMatkul("Pancasila", 2, [4.0])])),
+     3.4)
 
-# DEFINISI DAN SPESIFIKASI SELEKTOR
-# GetMhs: Transkrip → Mhs
-# {GetMhs(T) mengambil data mahasiswa dari transkrip T}
-def GetMhs(T: Transkrip) -> Mhs:
-    return T[0]
+# Edge Case
+print("\n[Edge Case]")
+test("CariMatkul - matkul tidak ditemukan",
+     CariMatkul(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])]), "Dasar Sistem"),
+     [])
 
-# GetListMatkul: Transkrip → list of Matkul
-# {GetListMatkul(T) mengambil list mata kuliah dari transkrip T}
-def GetListMatkul(T: Transkrip) -> Matkul:
-    return T[1]
+test("TotalSKSLulus - tidak ada yang lulus",
+     TotalSKSLulus(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [1.0]), MakeMatkul("Strukdis", 3, [1.5])])),
+     0)
 
-#DEFINISI DAN SPESIFIKASI FUNGSI ANTARA
-# TotalNilaiSKS: Transkrip → real
-# {TotalNilaiSKS(T) menghitung total dari NilaiAkhir * SKS untuk setiap matkul di T}
-def TotalNilaiSKS(T: Transkrip) -> float:
-    if isEmpty(GetListMatkul(T)):
-        return 0.0
-    else:
-        return (NilaiSekarangMK(FirstElmt(GetListMatkul(T))) * GetSKS(FirstElmt(GetListMatkul(T)))) + TotalNilaiSKS(MakeTranskrip(GetMhs(T), Tail(GetListMatkul(T))))
-    
-# TotalSKS: Transkrip → integer
-# {TotalSKS(T) menghitung total SKS dari semua matkul di T}
-def TotalSKS(T: Transkrip) -> int:
-    if isEmpty(GetListMatkul(T)):
-        return 0
-    else:
-        return GetSKS(FirstElmt(GetListMatkul(T))) + TotalSKS(MakeTranskrip(GetMhs(T), Tail(GetListMatkul(T))))
+test("JumlahMatkulMengulang - tidak ada mengulang",
+     JumlahMatkulMengulang(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0]), MakeMatkul("Aljabar Linear", 3, [4.0])])),
+     0)
 
-# DEFINISI DAN SPESIFIKASI OPERATOR
+test("IPKTranskrip - list matkul kosong",
+     IPKTranskrip(MakeTranskrip(MakeMhs("001", "Ahmad"), [])),
+     0.0)
 
-# CariMatkul: <Transkrip, string> → Matkul
-# {CariMatkul(T, namaMK) mencari dan mengambil Matkul dari
-# transkrip T berdasarkan nama mata kuliah namaMK}
-def CariMatkul(T: Transkrip, namaMK: str) -> Matkul:
-    if isEmpty(GetListMatkul(T)):
-        return GetListMatkul(T)
-    else:
-        if GetNamaMK(FirstElmt(GetListMatkul(T))) == namaMK:
-            return FirstElmt(GetListMatkul(T))
-        else:
-            return CariMatkul(MakeTranskrip(GetMhs(T), Tail(GetListMatkul(T))), namaMK)
+test("IPKTranskrip - semua matkul belum ada nilai",
+     IPKTranskrip(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, []), MakeMatkul("MTK1", 3, [])])),
+     0.0)
 
-# TotalSKSLulus: Transkrip → integer
-# {TotalSKSLulus(T) menjumlahkan seluruh SKS dari mata kuliah yang lulus
-# (nilai ≥ 2.0) pada transkrip T}
-def TotalSKSLulus(T: Transkrip) -> int:
-    if isEmpty(GetListMatkul(T)):
-        return 0
-    else:
-        if LulusMK(FirstElmt(GetListMatkul(T))):
-            return GetSKS(FirstElmt(GetListMatkul(T))) + TotalSKSLulus(MakeTranskrip(GetMhs(T), Tail(GetListMatkul(T))))
-        else:
-            return TotalSKSLulus(MakeTranskrip(GetMhs(T), Tail(GetListMatkul(T))))
-    
-#  IPKTranskrip: Transkrip → real
-#  {IPKTranskrip(T) menghitung IPK dari transkrip T dengan rumus:
-#  Σ(NilaiAkhir * SKS)/ ΣSKS}
-def IPKTranskrip(T: Transkrip) -> float:
-    if TotalSKS(T) == 0:
-        return 0.0
-    else:
-        return TotalNilaiSKS(T) / TotalSKS(T)
+# ============================================================
+# TEST CASE 4: SET TRANSKRIP - OPERATOR DASAR
+# ============================================================
+header("TEST CASE 4: SET TRANSKRIP - OPERATOR DASAR")
 
-# Bagian 2 — Set Transkrip
-# Definisi: SetTranskrip adalah list berisi beberapa Transkrip mahasiswa.
+# Normal Case
+print("\n[Normal Case]")
+test("AddTranskrip - tambah ke set kosong",
+     len(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])]))),
+     1)
 
-# DEFINISI DAN SPESIFIKASI KONSTRUKOR
-# MakeSetTranskrip: → SetTranskrip
-# {MakeSetTranskrip() membuat SetTranskrip kosong (list kosong)}
-def MakeSetTranskrip(ListTranskrip: list) -> list:
-    return ListTranskrip
+test("AddTranskrip - tambah mahasiswa baru",
+     len(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Strukdis", 3, [4.0])]))),
+     2)
 
-# DEFINISI DAN SPESIFIKASI SELEKTOR
-# GetAllNamaMatkul: SetTranskrip -> list
-# {GetAllNamaMatkul(S) mengumpulkan semua nama mata kuliah dari SetTranskrip S tanpa duplikat}
-def GetAllNamaMatkul(S: list) -> list:
-    if isEmpty(S):
-        return []
-    else:
-        return GabungNamaMatkul(GetNamaMatkulDariList(GetListMatkul(FirstElmt(S))), GetAllNamaMatkul(Tail(S)))
+test("CariTranskripMhs - ditemukan",
+     GetNama(GetMhs(CariTranskripMhs(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), "001"))),
+     "Ahmad")
 
-# GetNamaMatkulDariList: list -> list
-# {GetNamaMatkulDariList(ListMK) mengambil semua nama matkul dari ListMK}
-def GetNamaMatkulDariList(ListMK: list) -> list:
-    if isEmpty(ListMK):
-        return []
-    else:
-        return Konso(GetNamaMK(FirstElmt(ListMK)), GetNamaMatkulDariList(Tail(ListMK)))
-    
-# DEFINISI DAN SPESIFIKASI FUNGSI ANTARA
-# UpdateListMatkul: <list of Matkul, string, real> → list of Matkul
- # {UpdateListMatkul(ListMK, namaMK, nilai) mengupdate list mata kuliah
- # ListMK dengan menambahkan nilai baru nilai ke mata kuliah namaMK}       
-def UpdateListMatkul(ListMK: list, namaMK: str, nilai: float) -> list:
-    if isEmpty(ListMK):
-        return ListMK
-    else:
-        if GetNamaMK(FirstElmt(ListMK)) == namaMK:
-            return Konso(MakeMatkul(GetNamaMK(FirstElmt(ListMK)), GetSKS(FirstElmt(ListMK)), Konsi(GetNilai(FirstElmt(ListMK)), nilai)), Tail(ListMK))
-        else:
-            return Konso(FirstElmt(ListMK), UpdateListMatkul(Tail(ListMK), namaMK, nilai))
+test("AddNilaiMatkul - tambah nilai baru",
+     GetNilai(CariMatkul(CariTranskripMhs(AddNilaiMatkul(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [2.0])])), "001", "Daspro", 3.0), "001"), "Daspro")),
+     [2.0, 3.0])
 
- # JumlahMatkulMengulang: Transkrip → integer
- # {JumlahMatkulMengulang(T) menghitung jumlah mata kuliah yang
- # diulang (panjang list nilai > 1) pada transkrip T}
-def JumlahMatkulMengulang(T: Transkrip) -> int:
-    if isEmpty(GetListMatkul(T)):
-        return 0
-    else:
-        if MengulangMK(FirstElmt(GetListMatkul(T))):
-            return 1 + JumlahMatkulMengulang(MakeTranskrip(GetMhs(T), Tail(GetListMatkul(T))))
-        else:
-            return JumlahMatkulMengulang(MakeTranskrip(GetMhs(T), Tail(GetListMatkul(T))))
-        
-    
-# CountMengulangDiTranskrip: <string, list> -> integer
-# {CountMengulangDiTranskrip(namaMK, ListMK) menghitung apakah matkul namaMK diulang di ListMK}
-def CountMengulangDiTranskrip(namaMK: str, ListMK: list) -> int:
-    if isEmpty(ListMK):
-        return 0
-    else:
-        if GetNamaMK(FirstElmt(ListMK)) == namaMK:
-            if MengulangMK(FirstElmt(ListMK)):
-                return 1
-            else:
-                return 0
-        else:
-            return CountMengulangDiTranskrip(namaMK, Tail(ListMK))
-        
-# GabungNamaMatkul: <list, list> -> list
-# {GabungNamaMatkul(L1, L2) menggabungkan L1 dan L2 tanpa duplikat}
-def GabungNamaMatkul(L1: list, L2: list) -> list:
-        if isEmpty(L1):
-            return L2
-        else:
-            if IsMember(FirstElmt(L1), L2):
-                return GabungNamaMatkul(Tail(L1), L2)
-            else:
-                return GabungNamaMatkul(Tail(L1), Konso(FirstElmt(L1), L2))
-    
-    # MaxFrekuensiMatkul: <SetTranskrip, list> -> string
-    # {MaxFrekuensiMatkul(S, matkulList) mencari nama matkul dengan frekuensi mengulang tertinggi}
-def MaxFrekuensiMatkul(S: list, matkulList: list) -> str:
-        if isEmpty(matkulList):
-            return ""
-        elif IsOneElmt(matkulList):
-            return FirstElmt(matkulList)
-        else:
-            return BandingkanFrekuensi(S, FirstElmt(matkulList), MaxFrekuensiMatkul(S, Tail(matkulList)))
-    
-    # BandingkanFrekuensi: <SetTranskrip, string, string> -> string
-    # {BandingkanFrekuensi(S, mk1, mk2) membandingkan frekuensi mk1 dan mk2, mengembalikan yang lebih besar}
-def BandingkanFrekuensi(S: list, mk1: str, mk2: str) -> str:
-        if mk2 == "":
-            return mk1
-        else:
-            if CountFrekuensiMengulang(mk1, S) > CountFrekuensiMengulang(mk2, S):
-                return mk1
-            else:
-                return mk2
-# CountFrekuensiMengulang: <string, SetTranskrip> -> integer
-# {CountFrekuensiMengulang(namaMK, S) menghitung berapa kali mata kuliah namaMK diulang di seluruh SetTranskrip S}
-def CountFrekuensiMengulang(namaMK: str, S: list) -> int:
-    if isEmpty(S):
-         return 0
-    else:
-        return CountMengulangDiTranskrip(namaMK, GetListMatkul(FirstElmt(S))) + CountFrekuensiMengulang(namaMK, Tail(S))
-    
-# DEFINISI DAN SPESIFIKASI OPERATOR
-# AddTranskrip: <SetTranskrip, Transkrip> → SetTranskrip
-# {AddTranskrip(S, T) menambahkan transkrip T ke akhir SetTranskrip S
-# jika NIM mahasiswa pada T belum ada di S.
-# Jika sudah ada, tidak ditambahkan}
-def AddTranskrip(S: list, T: Transkrip) -> list:
-    if isEmpty(S):
-        return Konso(T, S)
-    else:
-        if GetNIM(GetMhs(FirstElmt(S))) == GetNIM(GetMhs(T)):
-            return S
-        else:
-            return Konso(FirstElmt(S), AddTranskrip(Tail(S), T))
+# Edge Case
+print("\n[Edge Case]")
+test("AddTranskrip - duplikat NIM tidak ditambah",
+     len(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Pancasila", 2, [4.0])]))),
+     1)
 
-# AddNilaiMatkul: <SetTranskrip, string, string, real> →
-# SetTranskrip
-# {AddNilaiMatkul(S, nim, namaMK, nilai) menambahkan nilai baru nilai ke
-# mata kuliah namaMK pada transkrip mahasiswa dengan NIM nim di
-# SetTranskrip S}
-def AddNilaiMatkul(S: list, nim: str, namaMK: str, nilai: float) -> list:
-    if isEmpty(S):
-        return S
-    else:
-        if GetNIM(GetMhs(FirstElmt(S))) == nim:
-            return Konso(MakeTranskrip(GetMhs(FirstElmt(S)), UpdateListMatkul(GetListMatkul(FirstElmt(S)), namaMK, nilai)), Tail(S))
-        else:
-            return Konso(FirstElmt(S), AddNilaiMatkul(Tail(S), nim, namaMK, nilai))
-        
-# CariTranskripMhs: <SetTranskrip, string> → Transkrip
-# {CariTranskripMhs(S, nim) mencari dan mengembalikan transkrip pertama
-# dengan NIM nim dari SetTranskrip S}
-def CariTranskripMhs(S: list, nim: str) -> Transkrip:
-    if isEmpty(S):
-        return []
-    else:
-        if GetNIM(GetMhs(FirstElmt(S))) == nim:
-            return FirstElmt(S)
-        else:
-            return CariTranskripMhs(Tail(S), nim)
-        
-# TopIPK: SetTranskrip → Mhs
-# {TopIPK(S) menghasilkan mahasiswa dengan IPK tertinggi dari
-# SetTranskrip S }
-def TopIPK(S: list) -> Mhs:
-    if isEmpty(S):
-        return None  # Return None jika list kosong
-    elif IsOneElmt(S):
-        return GetMhs(FirstElmt(S))
-    else:
-        if IPKTranskrip(FirstElmt(S)) >= IPKTranskrip(CariTranskripMhs(S, GetNIM(TopIPK(Tail(S))))):
-            return GetMhs(FirstElmt(S))
-        else:
-            return TopIPK(Tail(S))
-        
-# CountMhsPernahMengulang: SetTranskrip → integer
-# {CountMhsPernahMengulang(S) menghitung jumlah mahasiswa yang
-# pernah mengulang minimal 1 mata kuliah pada SetTranskrip S}
-def CountMhsPernahMengulang(S: list) -> int:
-    if isEmpty(S):
-        return 0
-    else:
-        if JumlahMatkulMengulang(FirstElmt(S)) > 0:
-            return 1 + CountMhsPernahMengulang(Tail(S))
-        else:
-            return CountMhsPernahMengulang(Tail(S))
-        
-# CountMhsLulusSemuaMatkul: SetTranskrip → integer
-# {CountMhsLulusSemuaMatkul(S) menghitung jumlah mahasiswa yang
-# lulus seluruh mata kuliah yang diambil pada SetTranskrip S}
-# CountMhsLulusSemuaMatkul: SetTranskrip → integer
-# {CountMhsLulusSemuaMatkul(S) menghitung jumlah mahasiswa yang
-# lulus seluruh mata kuliah yang diambil pada SetTranskrip S}
-def CountMhsLulusSemuaMatkul(S: list) -> int:
-    if isEmpty(S):
-        return 0
-    else:
-        if TotalSKSLulus(FirstElmt(S)) == TotalSKS(FirstElmt(S)):
-            return 1 + CountMhsLulusSemuaMatkul(Tail(S))
-        else:
-            return CountMhsLulusSemuaMatkul(Tail(S))
+test("CariTranskripMhs - tidak ditemukan",
+     CariTranskripMhs(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), "999"),
+     [])
 
+test("CariTranskripMhs - set kosong",
+     CariTranskripMhs(MakeSetTranskrip([]), "001"),
+     [])
 
-# MatkulPalingSeringDiulang: SetTranskrip → string
-# {MatkulPalingSeringDiulang(S) menghasilkan nama mata kuliah yang
-# paling sering diulang (frekuensi tertinggi) pada SetTranskrip S}
-def MatkulPalingSeringDiulang(S: list) -> str:
-    # CountFrekuensiMengulang: <string, SetTranskrip> -> integer
-    # {CountFrekuensiMengulang(namaMK, S) menghitung berapa kali mata kuliah namaMK diulang di seluruh SetTranskrip S}
-    def CountFrekuensiMengulang(namaMK: str, S: list) -> int:
-        if isEmpty(S):
-            return 0
-        else:
-            return CountMengulangDiTranskrip(namaMK, GetListMatkul(FirstElmt(S))) + CountFrekuensiMengulang(namaMK, Tail(S))
-    return MaxFrekuensiMatkul(S, GetAllNamaMatkul(S))
+# ============================================================
+# TEST CASE 5: SET TRANSKRIP - OPERATOR LANJUTAN
+# ============================================================
+header("TEST CASE 5: SET TRANSKRIP - OPERATOR LANJUTAN")
 
+# Normal Case
+print("\n[Normal Case]")
+test("TopIPK - mahasiswa IPK tertinggi",
+     GetNama(TopIPK(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Aljabar Linear", 3, [4.0])])))),
+     "Budi")
 
-# {CountMhsDenganIPKRentang(S, a, b) menghitung jumlah mahasiswa
-# dengan IPK dalam rentang [a, b] pada SetTranskrip S}
-# {CountMhsDenganIPKRentang(S, a, b) menghitung jumlah mahasiswa
-# dengan IPK dalam rentang [a, b] pada SetTranskrip S}
-def CountMhsDenganIPKRentang(S: list, a: float, b: float) -> int:
-    if isEmpty(S):
-        return 0
-    else:
-        ipk = IPKTranskrip(FirstElmt(S))
-        if a <= ipk <= b:
-            return 1 + CountMhsDenganIPKRentang(Tail(S), a, b)
-        else:
-            return CountMhsDenganIPKRentang(Tail(S), a, b)
-    
-print("="*50)
-print("Tubes RAPI - Implementasi Tipe Bentukan Data")
-print("="*50)
+test("CountMhsPernahMengulang - ada yang mengulang",
+     CountMhsPernahMengulang(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("MTK1", 3, [2.0, 3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Daspro", 3, [4.0])]))),
+     1)
 
-print("="*50)
-print("TES TIPE MHS")
-print("="*50)
-print(GetNIM(MakeMhs("A11.2020.01234", "Reno"))) # Output: "A11.2020.01234"
-print(GetNama(MakeMhs("A11.2020.01234", "Reno"))) # Output: "Reno"
+test("CountMhsLulusSemuaMatkul - semua lulus",
+     CountMhsLulusSemuaMatkul(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Strukdis", 3, [3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Pancasila", 2, [4.0])]))),
+     2)
 
-print("="*50)
-print("TES TIPE MATKUL")
-print("="*50)
-print(GetNamaMK(MakeMatkul("Daspro", 3, [2.0, 3.0]))) # Output: "Daspro"
-print(GetSKS(MakeMatkul("Daspro", 3, [2.0, 3.0]))) # Output: 3
-print(GetNilai(MakeMatkul("Daspro", 3, [2.0, 3.0]))) # Output: [2.0, 3.0]
-print(NilaiSekarangMK(MakeMatkul("Daspro", 3, [2.0, 3.0]))) # Output: 3.0
-print(NilaiSekarangMK(MakeMatkul("Matdis", 2, [])))  # Output: -1.0
-print(SudahAmbilMK(MakeMatkul("Matdis", 2, []))) # Output: false
-print(MengulangMK(MakeMatkul("Daspro", 3, [2.0, 3.0]))) # Output: True
-print(LulusMK(MakeMatkul("Daspro", 3, [2.0, 3.0]))) # Output: True
+test("MatkulPalingSeringDiulang",
+     MatkulPalingSeringDiulang(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Dasar Sistem", 3, [2.0, 3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Dasar Sistem", 3, [1.0, 4.0])]))),
+     "Dasar Sistem")
 
-print("="*50)
-print("TES TIPE TRANSKRIP")
-print("="*50)
-print(GetMhs(MakeTranskrip(MakeMhs("A11.2020.01234", "Reno"), [MakeMatkul("Daspro", 3, [2.0, 3.0]),  MakeMatkul("Matdis", 2, [3.0, 4.0])])))
-print(GetListMatkul(MakeTranskrip(MakeMhs("A11.2020.01234", "Reno"), [MakeMatkul("Daspro", 3, [2.0, 3.0]),  MakeMatkul("Matdis", 2, [3.0, 4.0])])))
-print(CariMatkul(MakeTranskrip(MakeMhs("A11.2020.01234", "Reno"), [MakeMatkul("Daspro", 3, [2.0, 3.0]),  MakeMatkul("Matdis", 2, [3.0, 4.0])]),"Daspro"))
-print(TotalSKSLulus(MakeTranskrip(MakeMhs("A11.2020.01234", "Reno"), [MakeMatkul("Daspro", 3, [2.0, 3.0]),  MakeMatkul("Matdis", 2, [3.0, 4.0])])))
-print(JumlahMatkulMengulang(MakeTranskrip(MakeMhs("A11.2020.01234", "Reno"), [MakeMatkul("Daspro", 3, [2.0, 3.0]),  MakeMatkul("Matdis", 2, [3.0, 4.0])])))
-print(IPKTranskrip(MakeTranskrip(MakeMhs("A11.2020.01234", "Reno"), [MakeMatkul("Daspro", 3, [2.0, 3.0]),  MakeMatkul("Matdis", 2, [3.0, 4.0])])))
+test("CountMhsDenganIPKRentang - rentang 3.0-4.0",
+     CountMhsDenganIPKRentang(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("MTK1", 3, [3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Aljabar Linear", 3, [4.0])])), 3.0, 4.0),
+     2)
 
-print("="*50)
-print("TES OPERATOR PALING BAWAH")
-print("="*50)
-S1 = MakeSetTranskrip([])
-M1 =MakeMhs("A11.01","Reno")
-MK1 =MakeMatkul("Daspro",3,[2.0])
-MK2 =MakeMatkul("Matdis",2,[3.0])
-T1 =MakeTranskrip(M1,[MK1,MK2])
-S2 =AddTranskrip(S1,T1)
-S3 =AddTranskrip(S2,T1)
-M2 =MakeMhs("A11.02","Andi")
-MK3 =MakeMatkul("Daspro",3,[3.0])
-MK4 =MakeMatkul("Matdis",2,[4.0])
-T2 =MakeTranskrip(M2,[MK3,MK4])
-S4 =AddTranskrip(S3,T2)
-M3 =MakeMhs("A11.03","Budi")
-MK5 =MakeMatkul("Daspro",3,[1.0,2.0])
-MK6 =MakeMatkul("Kalkulus",4, [3.0])
-T3 =MakeTranskrip(M3,[MK5,MK6])
-S5 =AddTranskrip(S4,T3)
-S6 = AddNilaiMatkul(S5,"A11.01","Daspro", 3.0)
-S7 = AddNilaiMatkul(S6,"A11.02","Daspro", 4.0)
+# Edge Case
+print("\n[Edge Case]")
+test("TopIPK - set kosong",
+     TopIPK(MakeSetTranskrip([])),
+     None)
 
-print("="*50)
-print('TESTCASE DENGAN VARIABLE')
-print("="*50)
-print(CariTranskripMhs(S7,"A11.01"))
-print(CariTranskripMhs(S7,"A11.03"))
-print(TopIPK(S7))
-print(CountMhsPernahMengulang(S7))
-print(CountMhsLulusSemuaMatkul(S7))
-print(MatkulPalingSeringDiulang(S7))
-print(CountMhsDenganIPKRentang(S7,2.0, 3.0))
+test("TopIPK - satu mahasiswa",
+     GetNama(TopIPK(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Strukdis", 3, [3.0])])))),
+     "Ahmad")
 
-print("="*50)
-print('TESTCASE TANPA VARIABLE')
-print("="*50)
-print(CariTranskripMhs([MakeTranskrip(MakeMhs("24060122130077", "Budi Santoso"), [MakeMatkul("Daspro", 3, [2.0, 3.0]), MakeMatkul("Matdis", 2, [4.0])])], "24060122130077"))
-print(TopIPK([MakeTranskrip(MakeMhs("24060122130077", "Budi Santoso"), [MakeMatkul("Daspro", 3, [2.0, 3.0]), MakeMatkul("Matdis", 2, [4.0])]), MakeTranskrip(MakeMhs("24060122130078", "Siti Aminah"), [MakeMatkul("Aljabar Linear", 3, [4.0]), MakeMatkul("Pancasila", 2, [4.0])])]))
-print(CountMhsPernahMengulang([MakeTranskrip(MakeMhs("24060122130077", "Budi Santoso"), [MakeMatkul("Daspro", 3, [2.0, 3.0]), MakeMatkul("Matdis", 2, [4.0])]), MakeTranskrip(MakeMhs("24060122130078", "Siti Aminah"), [MakeMatkul("Aljabar Linear", 3, [4.0]), MakeMatkul("Pancasila", 2, [4.0])])]))
-print(CountMhsLulusSemuaMatkul([MakeTranskrip(MakeMhs("24060122130077", "Budi Santoso"), [MakeMatkul("Daspro", 3, [2.0, 3.0]), MakeMatkul("Matdis", 2, [4.0])]), MakeTranskrip(MakeMhs("24060122130078", "Siti Aminah"), [MakeMatkul("Aljabar Linear", 3, [4.0]), MakeMatkul("Pancasila", 2, [4.0])])]))
-print(MatkulPalingSeringDiulang([MakeTranskrip(MakeMhs("24060122130077", "Budi Santoso"), [MakeMatkul("Daspro", 3, [2.0, 3.0]), MakeMatkul("Matdis", 2, [4.0])]), MakeTranskrip(MakeMhs("24060122130078", "Siti Aminah"), [MakeMatkul("Daspro", 3, [2.0]), MakeMatkul("Pancasila", 2, [4.0])])]))
-print(CountMhsDenganIPKRentang([MakeTranskrip(MakeMhs("24060122130077", "Budi Santoso"), [MakeMatkul("Daspro", 3, [2.0, 3.0]), MakeMatkul("Matdis", 2, [4.0])]), MakeTranskrip(MakeMhs("24060122130078", "Siti Aminah"), [MakeMatkul("Aljabar Linear", 3, [4.0]), MakeMatkul("Pancasila", 2, [4.0])])], 3.0, 4.0))
+test("CountMhsPernahMengulang - tidak ada mengulang",
+     CountMhsPernahMengulang(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Pancasila", 2, [3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Dasar Sistem", 3, [4.0])]))),
+     0)
 
+test("CountMhsLulusSemuaMatkul - ada tidak lulus",
+     CountMhsLulusSemuaMatkul(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("MTK1", 3, [1.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Aljabar Linear", 3, [4.0])]))),
+     1)
 
+test("CountMhsDenganIPKRentang - tidak ada dalam rentang",
+     CountMhsDenganIPKRentang(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Strukdis", 3, [3.0])])), 4.5, 5.0),
+     0)
 
+test("CountMhsDenganIPKRentang - set kosong",
+     CountMhsDenganIPKRentang(MakeSetTranskrip([]), 0.0, 4.0),
+     0)
+
+# ============================================================
+# RINGKASAN
+# ============================================================
+header("TEST CASE SELESAI")
+print("\nSemua test case telah dijalankan.")
+print("Periksa hasil di atas untuk melihat status PASS/FAIL.")
