@@ -464,14 +464,11 @@ def MatkulPalingSeringDiulang(S: list) -> str:
 
 # {CountMhsDenganIPKRentang(S, a, b) menghitung jumlah mahasiswa
 # dengan IPK dalam rentang [a, b] pada SetTranskrip S}
-# {CountMhsDenganIPKRentang(S, a, b) menghitung jumlah mahasiswa
-# dengan IPK dalam rentang [a, b] pada SetTranskrip S}
 def CountMhsDenganIPKRentang(S: list, a: float, b: float) -> int:
     if isEmpty(S):
         return 0
     else:
-        ipk = IPKTranskrip(FirstElmt(S))
-        if a <= ipk <= b:
+        if a <= IPKTranskrip(FirstElmt(S))<= b:
             return 1 + CountMhsDenganIPKRentang(Tail(S), a, b)
         else:
             return CountMhsDenganIPKRentang(Tail(S), a, b)

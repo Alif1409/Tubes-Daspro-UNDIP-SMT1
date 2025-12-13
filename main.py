@@ -64,26 +64,26 @@ header("TEST CASE 1: TIPE MAHASISWA (Mhs)")
 # Normal Case
 print("\n[Normal Case]")
 test("MakeMhs - konstruktor",
-     MakeMhs("24060122130001", "Ahmad"),
-     ("24060122130001", "Ahmad"))
+     MakeMhs("24060125130001", "Ahmad"),
+     ("24060125130001", "Ahmad"))
 
 test("GetNIM - selektor NIM",
-     GetNIM(MakeMhs("24060122130001", "Ahmad")),
-     "24060122130001")
+     GetNIM(MakeMhs("24060125130001", "Ahmad")),
+     "24060125130001")
 
 test("GetNama - selektor nama",
-     GetNama(MakeMhs("24060122130001", "Ahmad")),
-     "Ahmad")
+     GetNama(MakeMhs("24060125130002", "Budi")),
+     "Budi")
 
 # Edge Case
 print("\n[Edge Case]")
 test("MakeMhs - NIM dan nama kosong",
-     MakeMhs("", ""),
-     ("", ""))
+     MakeMhs("24060125130003", "Citra"),
+     ("24060125130003", "Citra"))
 
 test("GetNIM - dari Mhs kosong",
-     GetNIM(MakeMhs("", "")),
-     "")
+     GetNIM(MakeMhs("24060125130003", "Citra")),
+     "24060125130003")
 
 # ============================================================
 # TEST CASE 2: TIPE MATA KULIAH (Matkul)
@@ -158,49 +158,49 @@ header("TEST CASE 3: TIPE TRANSKRIP")
 # Normal Case
 print("\n[Normal Case]")
 test("MakeTranskrip - konstruktor",
-     GetNIM(GetMhs(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])]))),
-     "001")
+     MakeTranskrip(MakeMhs("24060125130004", "Dewi"), [MakeMatkul("Daspro", 3, [3.0])]),
+     (("24060125130004", "Dewi"), [("Daspro", 3, [3.0])]))
 
 test("GetMhs - selektor mahasiswa",
-     GetMhs(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])),
-     ("001", "Ahmad"))
+     GetMhs(MakeTranskrip(MakeMhs("24060125130004", "Dewi"), [MakeMatkul("Daspro", 3, [3.0])])),
+     ("24060125130004", "Dewi"))
 
 test("CariMatkul - matkul ditemukan",
-     GetNamaMK(CariMatkul(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0]), MakeMatkul("Strukdis", 3, [4.0])]), "Daspro")),
-     "Daspro")
+     CariMatkul(MakeTranskrip(MakeMhs("24060125130005", "Eka"), [MakeMatkul("Daspro", 3, [3.0]), MakeMatkul("Strukdis", 3, [4.0])]), "Daspro"),
+     ("Daspro", 3, [3.0]))
 
 test("TotalSKSLulus - semua lulus",
-     TotalSKSLulus(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0]), MakeMatkul("Aljabar Linear", 3, [4.0])])),
+     TotalSKSLulus(MakeTranskrip(MakeMhs("24060125130006", "Fatah"), [MakeMatkul("Daspro", 3, [3.0]), MakeMatkul("Aljabar Linear", 3, [4.0])])),
      6)
 
 test("JumlahMatkulMengulang - ada yang mengulang",
-     JumlahMatkulMengulang(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [2.0, 3.0]), MakeMatkul("MTK1", 3, [4.0])])),
+     JumlahMatkulMengulang(MakeTranskrip(MakeMhs("24060125130007", "Gina"), [MakeMatkul("Daspro", 3, [2.0, 3.0]), MakeMatkul("MTK1", 3, [4.0])])),
      1)
 
 test("IPKTranskrip - hitung IPK",
-     IPKTranskrip(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0]), MakeMatkul("Pancasila", 2, [4.0])])),
+     IPKTranskrip(MakeTranskrip(MakeMhs("24060125130008", "Hendra"), [MakeMatkul("Daspro", 3, [3.0]), MakeMatkul("Pancasila", 2, [4.0])])),
      3.4)
 
 # Edge Case
 print("\n[Edge Case]")
 test("CariMatkul - matkul tidak ditemukan",
-     CariMatkul(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])]), "Dasar Sistem"),
+     CariMatkul(MakeTranskrip(MakeMhs("24060125130009", "Indah"), [MakeMatkul("Daspro", 3, [3.0])]), "Dasar Sistem"),
      [])
 
 test("TotalSKSLulus - tidak ada yang lulus",
-     TotalSKSLulus(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [1.0]), MakeMatkul("Strukdis", 3, [1.5])])),
+     TotalSKSLulus(MakeTranskrip(MakeMhs("24060125130001", "Ahmad"), [MakeMatkul("Daspro", 3, [1.0]), MakeMatkul("Strukdis", 3, [1.5])])),
      0)
 
 test("JumlahMatkulMengulang - tidak ada mengulang",
-     JumlahMatkulMengulang(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0]), MakeMatkul("Aljabar Linear", 3, [4.0])])),
+     JumlahMatkulMengulang(MakeTranskrip(MakeMhs("24060125130002", "Budi"), [MakeMatkul("Daspro", 3, [3.0]), MakeMatkul("Aljabar Linear", 3, [4.0])])),
      0)
 
 test("IPKTranskrip - list matkul kosong",
-     IPKTranskrip(MakeTranskrip(MakeMhs("001", "Ahmad"), [])),
+     IPKTranskrip(MakeTranskrip(MakeMhs("24060125130003", "Citra"), [])),
      0.0)
 
 test("IPKTranskrip - semua matkul belum ada nilai",
-     IPKTranskrip(MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, []), MakeMatkul("MTK1", 3, [])])),
+     IPKTranskrip(MakeTranskrip(MakeMhs("24060125130004", "Dewi"), [MakeMatkul("Daspro", 3, []), MakeMatkul("MTK1", 3, [])])),
      0.0)
 
 # ============================================================
@@ -211,33 +211,33 @@ header("TEST CASE 4: SET TRANSKRIP - OPERATOR DASAR")
 # Normal Case
 print("\n[Normal Case]")
 test("AddTranskrip - tambah ke set kosong",
-     GetNIM(GetMhs(FirstElmt(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])]))))),
-     "001")
+     AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130005", "Eka"), [MakeMatkul("Daspro", 3, [3.0])])),
+     [(("24060125130005", "Eka"), [("Daspro", 3, [3.0])])])
 
 test("AddTranskrip - tambah mahasiswa baru",
-     GetNama(GetMhs(CariTranskripMhs(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Strukdis", 3, [4.0])])), "002"))),
-     "Budi")
+     AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130005", "Eka"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("24060125130006", "Fatah"), [MakeMatkul("Strukdis", 3, [4.0])])),
+     [(("24060125130005", "Eka"), [("Daspro", 3, [3.0])]), (("24060125130006", "Fatah"), [("Strukdis", 3, [4.0])])])
 
-test("CariTranskripMhs - ditemukan",
-     GetNama(GetMhs(CariTranskripMhs(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), "001"))),
-     "Ahmad")
+test("CariTranskripMhs - cari mahasiswa 001",
+     CariTranskripMhs(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130005", "Eka"), [MakeMatkul("Daspro", 3, [3.0])])), "24060125130005"),
+     (("24060125130005", "Eka"), [("Daspro", 3, [3.0])]))
 
 test("AddNilaiMatkul - tambah nilai baru",
-     GetNilai(CariMatkul(CariTranskripMhs(AddNilaiMatkul(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [2.0])])), "001", "Daspro", 3.0), "001"), "Daspro")),
-     [2.0, 3.0])
+     AddNilaiMatkul(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130007", "Gina"), [MakeMatkul("Daspro", 3, [2.0])])), "24060125130007", "Daspro", 3.0),
+     [(("24060125130007", "Gina"), [("Daspro", 3, [2.0, 3.0])])])
 
 # Edge Case
 print("\n[Edge Case]")
 test("AddTranskrip - duplikat NIM tidak ditambah",
-     isEmpty(Tail(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Pancasila", 2, [4.0])])))),
-     True)
+     AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130008", "Hendra"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("24060125130008", "Hendra"), [MakeMatkul("Pancasila", 2, [4.0])])),
+     [(("24060125130008", "Hendra"), [("Daspro", 3, [3.0])])])
 
 test("CariTranskripMhs - tidak ditemukan",
-     CariTranskripMhs(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), "999"),
+     CariTranskripMhs(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130009", "Indah"), [MakeMatkul("Daspro", 3, [3.0])])), "24060125130999"),
      [])
 
 test("CariTranskripMhs - set kosong",
-     CariTranskripMhs(MakeSetTranskrip([]), "001"),
+     CariTranskripMhs(MakeSetTranskrip([]), "24060125130001"),
      [])
 
 # ============================================================
@@ -248,23 +248,23 @@ header("TEST CASE 5: SET TRANSKRIP - OPERATOR LANJUTAN")
 # Normal Case
 print("\n[Normal Case]")
 test("TopIPK - mahasiswa IPK tertinggi",
-     GetNama(TopIPK(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Aljabar Linear", 3, [4.0])])))),
-     "Budi")
+     TopIPK(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("24060125130002", "Budi"), [MakeMatkul("Aljabar Linear", 3, [4.0])]))),
+     ("24060125130002", "Budi"))
 
 test("CountMhsPernahMengulang - ada yang mengulang",
-     CountMhsPernahMengulang(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("MTK1", 3, [2.0, 3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Daspro", 3, [4.0])]))),
+     CountMhsPernahMengulang(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130003", "Citra"), [MakeMatkul("MTK1", 3, [2.0, 3.0])])), MakeTranskrip(MakeMhs("24060125130004", "Dewi"), [MakeMatkul("Daspro", 3, [4.0])]))),
      1)
 
 test("CountMhsLulusSemuaMatkul - semua lulus",
-     CountMhsLulusSemuaMatkul(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Strukdis", 3, [3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Pancasila", 2, [4.0])]))),
+     CountMhsLulusSemuaMatkul(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130005", "Eka"), [MakeMatkul("Strukdis", 3, [3.0])])), MakeTranskrip(MakeMhs("24060125130006", "Fatah"), [MakeMatkul("Pancasila", 2, [4.0])]))),
      2)
 
 test("MatkulPalingSeringDiulang",
-     MatkulPalingSeringDiulang(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Dasar Sistem", 3, [2.0, 3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Dasar Sistem", 3, [1.0, 4.0])]))),
+     MatkulPalingSeringDiulang(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130007", "Gina"), [MakeMatkul("Dasar Sistem", 3, [2.0, 3.0])])), MakeTranskrip(MakeMhs("24060125130008", "Hendra"), [MakeMatkul("Dasar Sistem", 3, [1.0, 4.0])]))),
      "Dasar Sistem")
 
 test("CountMhsDenganIPKRentang - rentang 3.0-4.0",
-     CountMhsDenganIPKRentang(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("MTK1", 3, [3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Aljabar Linear", 3, [4.0])])), 3.0, 4.0),
+     CountMhsDenganIPKRentang(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130009", "Indah"), [MakeMatkul("MTK1", 3, [3.0])])), MakeTranskrip(MakeMhs("24060125130010", "Jaka"), [MakeMatkul("Aljabar Linear", 3, [4.0])])), 3.0, 4.0),
      2)
 
 # Edge Case
@@ -274,19 +274,19 @@ test("TopIPK - set kosong",
      None)
 
 test("TopIPK - satu mahasiswa",
-     GetNama(TopIPK(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Strukdis", 3, [3.0])])))),
-     "Ahmad")
+     TopIPK(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130001", "Ahmad"), [MakeMatkul("Strukdis", 3, [3.0])]))),
+     ("24060125130001", "Ahmad"))
 
 test("CountMhsPernahMengulang - tidak ada mengulang",
-     CountMhsPernahMengulang(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Pancasila", 2, [3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Dasar Sistem", 3, [4.0])]))),
+     CountMhsPernahMengulang(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130002", "Budi"), [MakeMatkul("Pancasila", 2, [3.0])])), MakeTranskrip(MakeMhs("24060125130003", "Citra"), [MakeMatkul("Dasar Sistem", 3, [4.0])]))),
      0)
 
 test("CountMhsLulusSemuaMatkul - ada tidak lulus",
-     CountMhsLulusSemuaMatkul(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("MTK1", 3, [1.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Aljabar Linear", 3, [4.0])]))),
+     CountMhsLulusSemuaMatkul(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130004", "Dewi"), [MakeMatkul("MTK1", 3, [1.0])])), MakeTranskrip(MakeMhs("24060125130005", "Eka"), [MakeMatkul("Aljabar Linear", 3, [4.0])]))),
      1)
 
 test("CountMhsDenganIPKRentang - tidak ada dalam rentang",
-     CountMhsDenganIPKRentang(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Strukdis", 3, [3.0])])), 4.5, 5.0),
+     CountMhsDenganIPKRentang(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("24060125130006", "Fatah"), [MakeMatkul("Strukdis", 3, [3.0])])), 4.5, 5.0),
      0)
 
 test("CountMhsDenganIPKRentang - set kosong",
