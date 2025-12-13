@@ -357,6 +357,15 @@ def BandingkanFrekuensi(S: list, mk1: str, mk2: str) -> str:
                 return mk1
             else:
                 return mk2
+
+# CountFrekuensiMengulang: <string, SetTranskrip> -> integer
+# {CountFrekuensiMengulang(namaMK, S) menghitung berapa kali mata kuliah namaMK diulang di seluruh SetTranskrip S}
+def CountFrekuensiMengulang(namaMK: str, S: list) -> int:
+    if isEmpty(S):
+        return 0
+    else:
+        return CountMengulangDiTranskrip(namaMK, GetListMatkul(FirstElmt(S))) + CountFrekuensiMengulang(namaMK, Tail(S))
+
 # CountFrekuensiMengulang: <string, SetTranskrip> -> integer
 # {CountFrekuensiMengulang(namaMK, S) menghitung berapa kali mata kuliah namaMK diulang di seluruh SetTranskrip S}
 def CountFrekuensiMengulang(namaMK: str, S: list) -> int:
@@ -451,15 +460,7 @@ def CountMhsLulusSemuaMatkul(S: list) -> int:
 # {MatkulPalingSeringDiulang(S) menghasilkan nama mata kuliah yang
 # paling sering diulang (frekuensi tertinggi) pada SetTranskrip S}
 def MatkulPalingSeringDiulang(S: list) -> str:
-    # CountFrekuensiMengulang: <string, SetTranskrip> -> integer
-    # {CountFrekuensiMengulang(namaMK, S) menghitung berapa kali mata kuliah namaMK diulang di seluruh SetTranskrip S}
-    def CountFrekuensiMengulang(namaMK: str, S: list) -> int:
-        if isEmpty(S):
-            return 0
-        else:
-            return CountMengulangDiTranskrip(namaMK, GetListMatkul(FirstElmt(S))) + CountFrekuensiMengulang(namaMK, Tail(S))
     return MaxFrekuensiMatkul(S, GetAllNamaMatkul(S))
-
 
 # {CountMhsDenganIPKRentang(S, a, b) menghitung jumlah mahasiswa
 # dengan IPK dalam rentang [a, b] pada SetTranskrip S}
