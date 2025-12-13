@@ -38,6 +38,9 @@ CountMhsLulusSemuaMatkul = tubes.CountMhsLulusSemuaMatkul
 MatkulPalingSeringDiulang = tubes.MatkulPalingSeringDiulang
 CountMhsDenganIPKRentang = tubes.CountMhsDenganIPKRentang
 TotalSKS = tubes.TotalSKS
+isEmpty = tubes.isEmpty
+FirstElmt = tubes.FirstElmt
+Tail = tubes.Tail
 
 # ============================================================
 # HELPER FUNCTION
@@ -208,12 +211,12 @@ header("TEST CASE 4: SET TRANSKRIP - OPERATOR DASAR")
 # Normal Case
 print("\n[Normal Case]")
 test("AddTranskrip - tambah ke set kosong",
-     len(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])]))),
-     1)
+     GetNIM(GetMhs(FirstElmt(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])]))))),
+     "001")
 
 test("AddTranskrip - tambah mahasiswa baru",
-     len(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Strukdis", 3, [4.0])]))),
-     2)
+     GetNama(GetMhs(CariTranskripMhs(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("002", "Budi"), [MakeMatkul("Strukdis", 3, [4.0])])), "002"))),
+     "Budi")
 
 test("CariTranskripMhs - ditemukan",
      GetNama(GetMhs(CariTranskripMhs(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), "001"))),
@@ -226,8 +229,8 @@ test("AddNilaiMatkul - tambah nilai baru",
 # Edge Case
 print("\n[Edge Case]")
 test("AddTranskrip - duplikat NIM tidak ditambah",
-     len(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Pancasila", 2, [4.0])]))),
-     1)
+     isEmpty(Tail(AddTranskrip(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Pancasila", 2, [4.0])])))),
+     True)
 
 test("CariTranskripMhs - tidak ditemukan",
      CariTranskripMhs(AddTranskrip(MakeSetTranskrip([]), MakeTranskrip(MakeMhs("001", "Ahmad"), [MakeMatkul("Daspro", 3, [3.0])])), "999"),
